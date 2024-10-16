@@ -1,4 +1,7 @@
+.env
 # Ignore Terraform state files
 *.tfstate
 *.tfstate.backup
 .terraform/
+
+.vscode

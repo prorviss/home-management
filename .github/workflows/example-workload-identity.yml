@@ -30,7 +30,7 @@ jobs:
       - name: Terraform fmt
         id: fmt
         run: terraform fmt -check
-        working-directory: terraform
+        working-directory: terraform/shared
 
       - name: Terraform Init
         id: init
@@ -40,9 +40,9 @@ jobs:
       - name: Terraform Validate
         id: validate
         run: terraform validate -no-color
-        working-directory: terraform
+        working-directory: terraform/shared
 
       - name: Terraform Plan
         id: plan
         run: terraform plan -no-color
-        working-directory: terraform
+        working-directory: terraform/shared
