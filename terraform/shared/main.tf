@@ -50,6 +50,12 @@ resource "google_service_account" "terraform_sa" {
   display_name = "Terraform Service Account"
 }
 
+resource "google_project_iam_member" "terraform_sa_iam_admin" {
+  project = var.project_id
+  role    = "roles/resourcemanager.projectIamAdmin"
+  member  = "serviceAccount:${google_service_account.terraform_sa.email}"
+}
+
 resource "google_project_iam_member" "terraform_sa_editor" {
   project = var.project_id
   role    = "roles/editor"
