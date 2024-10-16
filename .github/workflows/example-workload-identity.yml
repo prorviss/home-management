@@ -23,20 +23,24 @@ jobs:
           workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
 
-      - uses: hashicorp/setup-terraform@v1
+      - uses: hashicorp/setup-terraform@v3
 
       - name: Terraform fmt
         id: fmt
         run: terraform fmt -check
+        working-directory: terraform
 
       - name: Terraform Init
         id: init
         run: terraform init
+        working-directory: terraform
 
       - name: Terraform Validate
         id: validate
         run: terraform validate -no-color
+        working-directory: terraform
 
       - name: Terraform Plan
         id: plan
         run: terraform plan -no-color
+        working-directory: terraform
