@@ -163,7 +163,6 @@ else {
 # Check if Git repository is initialized
 if (!(Test-Path -Path ".git" -PathType Container)) {
   Write-Host "Initializing Git repository and setting remote..."
-  Set-Location $LOCAL_DIR
   git init
   git remote add origin "git@github.com:$REPO.git"
   git add .
