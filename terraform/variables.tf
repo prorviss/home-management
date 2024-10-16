@@ -4,6 +4,12 @@ variable "project_id" {
   default     = "home-management-438820"
 }
 
+variable "project_number" {
+  description = "The project number"
+  type        = number
+  default     = 656120491361
+}
+
 variable "region" {
   description = "Google Cloud region"
   type        = string
