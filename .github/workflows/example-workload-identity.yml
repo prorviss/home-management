@@ -46,3 +46,8 @@ jobs:
         id: plan
         run: terraform plan -no-color
         working-directory: terraform/shared
+
+      - name: Terraform Apply
+        id: apply
+        run: terraform apply -auto-approve
+        working-directory: terraform/shared

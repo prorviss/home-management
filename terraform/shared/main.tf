@@ -61,3 +61,9 @@ resource "google_project_iam_member" "terraform_sa_storage-admin" {
   role    = "roles/storage.admin"
   member  = "serviceAccount:${google_service_account.terraform_sa.email}"
 }
+
+resource "google_project_iam_member" "terraform_sa_workload-identity-user" {
+  project = var.project_id
+  role    = "roles/iam.workloadIdentityUser"
+  member  = "serviceAccount:${google_service_account.terraform_sa.email}"
+}
