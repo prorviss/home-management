@@ -44,13 +44,17 @@ jobs:
         $jsonString = Get-Content -Raw -Path "project_variables.json"
         $json = $jsonString | ConvertFrom-Json
         
-        Write-Host $jsonString
+        $projectId = $json.projectId
+        $projectNumber = $json.projectNumber
+        $region = $json.region
+        $artifactRegistryName = $json.artifactRegistryName
+        $artifactRegistryId = $json.artifactRegistryId
 
-        Add-Content -Path $env:GITHUB_ENV -Value "PROJECT_ID=$($json.projectId)"
-        Add-Content -Path $env:GITHUB_ENV -Value "PROJECT_NUMBER=$json.$($projectNumber)"
-        Add-Content -Path $env:GITHUB_ENV -Value "REGION=$json.$($region)"
-        Add-Content -Path $env:GITHUB_ENV -Value "ARTIFACT_REGISTRY_NAME=$json.$($artifactRegistryName)"
-        Add-Content -Path $env:GITHUB_ENV -Value "ARTIFACT_REGISTRY_ID=$json.$($artifactRegistryId)"
+        Add-Content -Path $env:GITHUB_ENV -Value "PROJECT_ID=$projectId"
+        Add-Content -Path $env:GITHUB_ENV -Value "PROJECT_NUMBER=$projectNumber"
+        Add-Content -Path $env:GITHUB_ENV -Value "REGION=$region"
+        Add-Content -Path $env:GITHUB_ENV -Value "ARTIFACT_REGISTRY_NAME=$artifactRegistryName"
+        Add-Content -Path $env:GITHUB_ENV -Value "ARTIFACT_REGISTRY_ID=$artifactRegistryId"
 
     - name: 'Docker Auth'
       uses: 'docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567' # docker/login-action@v3
