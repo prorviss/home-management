@@ -1,0 +1,64 @@
+name: Deploy Google Auth Service
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - services/google-auth-service/**
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    permissions:
+     contents: 'read'
+     id-token: 'write'
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - id: 'auth'
+      name: 'Authenticate to Google Cloud'
+      uses: 'google-github-actions/auth@f112390a2df9932162083945e46d439060d66ec2' # google-github-actions/auth@v2
+      with:
+        workload_identity_provider: '${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}'
+
+    - name: 'Set up Cloud SDK'
+      uses: 'google-github-actions/setup-gcloud@v2'
+      with:
+        version: '>= 363.0.0'
+
+    - name: Download JSON file from Google Cloud Storage
+      run: |
+        gsutil cp gs://${{ secrets.GCS_BUCKET }}/project_variables.json project_variables.json
+
+    - name: Parse JSON and set environment variables using PowerShell
+      shell: pwsh
+      run: |
+        # Read the JSON file
+        $jsonString = Get-Content -Raw -Path "project_variables.json"
+        $json = $jsonString | ConvertFrom-Json
+        
+        Write-Host $jsonString
+
+        # Export variables for subsequent steps
+        echo "::set-env name=PROJECT_ID::$json.projectId"
+        echo "::set-env name=PROJECT_NUMBER::$json.projectNumber"
+        echo "::set-env name=REGION::$json.region"
+        echo "::set-env name=ARTIFACT_REGISTRY_NAME::$json.artifactRegistryName"
+        echo "::set-env name=ARTIFACT_REGISTRY_ID::$json.artifactRegistryId"
+
+    - name: 'Docker Auth'
+      uses: 'docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567' # docker/login-action@v3
+      with:
+        username: 'oauth2accesstoken'
+        password: '${{ steps.auth.outputs.auth_token }}'
+        registry: '${{ env.REGION }}-docker.pkg.dev'
+
+    - name: Build and Push Docker Image
+      run: |
+        docker build -t ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY_NAME }}/google-auth-service:latest .
+        docker push ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY_NAME }}/google-auth-service:latest
+      working-directory: services/google-auth-service
