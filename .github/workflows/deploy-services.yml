@@ -46,12 +46,11 @@ jobs:
         
         Write-Host $jsonString
 
-        # Export variables for subsequent steps
-        echo "::set-env name=PROJECT_ID::$json.projectId"
-        echo "::set-env name=PROJECT_NUMBER::$json.projectNumber"
-        echo "::set-env name=REGION::$json.region"
-        echo "::set-env name=ARTIFACT_REGISTRY_NAME::$json.artifactRegistryName"
-        echo "::set-env name=ARTIFACT_REGISTRY_ID::$json.artifactRegistryId"
+        Add-Content -Path $env:GITHUB_ENV -Value "PROJECT_ID=$json.projectId"
+        Add-Content -Path $env:GITHUB_ENV -Value "PROJECT_NUMBER=$json.projectNumber"
+        Add-Content -Path $env:GITHUB_ENV -Value "REGION=$json.region"
+        Add-Content -Path $env:GITHUB_ENV -Value "ARTIFACT_REGISTRY_NAME=$json.artifactRegistryName"
+        Add-Content -Path $env:GITHUB_ENV -Value "ARTIFACT_REGISTRY_ID=$json.artifactRegistryId"
 
     - name: 'Docker Auth'
       uses: 'docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567' # docker/login-action@v3
