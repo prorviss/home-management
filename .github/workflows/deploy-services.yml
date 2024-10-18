@@ -32,6 +32,7 @@ jobs:
 
     - name: Download JSON file from Google Cloud Storage
       run: |
+        gcloud auth list
         gsutil cp gs://${{ secrets.GCS_BUCKET }}/project_variables.json project_variables.json
 
     - name: Parse JSON and set environment variables using PowerShell
