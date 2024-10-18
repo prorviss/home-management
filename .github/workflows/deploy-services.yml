@@ -21,7 +21,7 @@ jobs:
 
     - name: "Auth in GCP"
       id: "auth"
-      uses: "google-github-actions/auth@v1"
+      uses: "google-github-actions/auth@v2"
       with:
         token_format: "access_token"
         workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
@@ -56,11 +56,12 @@ jobs:
         Add-Content -Path $env:GITHUB_ENV -Value "ARTIFACT_REGISTRY_NAME=$artifactRegistryName"
         Add-Content -Path $env:GITHUB_ENV -Value "ARTIFACT_REGISTRY_ID=$artifactRegistryId"
 
-    - name: 'Docker Auth'
-      uses: 'docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567' # docker/login-action@v3
+    - name: Docker Auth
+      id: docker-auth
+      uses: 'docker/login-action@v1'
       with:
         username: 'oauth2accesstoken'
-        password: '${{ steps.auth.outputs.auth_token }}'
+        password: '${{ steps.auth.outputs.access_token }}'
         registry: '${{ env.REGION }}-docker.pkg.dev'
 
     - name: Build and Push Docker Image
