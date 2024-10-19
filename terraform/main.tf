@@ -9,6 +9,11 @@ resource "google_service_account" "terraform_sa" {
   display_name = local.serviceAccount.display_name
 }
 
+resource "google_service_account" "cloud_run_sa" {
+  account_id   = "cloudrun-sa"
+  display_name = "Cloud Run Service Account"
+}
+
 resource "google_project_iam_member" "service_account_roles" {
   for_each = toset(local.serviceAccount.project_roles)
   project  = var.project_id
@@ -69,9 +74,9 @@ resource "google_storage_bucket_object" "project_variables" {
   name = "project_variables.json"
   content = jsonencode(
     {
-      "projectId" : var.project_id
-      "projectNumber" : var.project_number
-      "region" : var.region
+      "projectId"            = var.project_id
+      "projectNumber"        = var.project_number
+      "region"               = var.region
       "artifactRegistryName" = google_artifact_registry_repository.home-management-docker-registry.name
       "artifactRegistryId"   = google_artifact_registry_repository.home-management-docker-registry.id
     }

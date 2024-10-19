@@ -68,4 +68,10 @@ jobs:
       run: |
         docker build -t ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY_NAME }}/google-auth-service:latest .
         docker push ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REGISTRY_NAME }}/google-auth-service:latest
-      working-directory: services/google-auth-service
+      working-directory: services/google-auth-service/src
+
+    - name: Deploy Container
+      run: |
+        terraform init
+        terraform apply --autoapprove
+      working-directory: services/google-auth-service/terraform
