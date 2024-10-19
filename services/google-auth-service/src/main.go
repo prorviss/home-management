@@ -10,8 +10,6 @@ import (
 	"orviss.co.za/google-auth-service/handlers"
 )
 
-// Hello Again Again Again Again Again
-
 func main() {
 
 	ctx := context.Background()
