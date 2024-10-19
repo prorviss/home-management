@@ -14,6 +14,12 @@ resource "google_service_account" "cloud_run_sa" {
   display_name = "Cloud Run Service Account"
 }
 
+resource "google_project_iam_member" "cloud_run_sa_roles" {
+  project = var.project_id
+  role    = "roles/secretmanager.secretAccessor"
+  member  = "serviceAccount:${google_service_account.cloud_run_sa.email}"
+}
+
 resource "google_project_iam_member" "service_account_roles" {
   for_each = toset(local.serviceAccount.project_roles)
   project  = var.project_id

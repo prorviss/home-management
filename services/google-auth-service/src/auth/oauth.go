@@ -2,7 +2,6 @@ package auth
 
 import (
 	"context"
-	"fmt"
 	"os"
 
 	"golang.org/x/oauth2"
@@ -20,12 +19,10 @@ var OAuthConfig = &oauth2.Config{
 func getOAuthRedirectURL() string {
 
 	if os.Getenv("K_SERVICE") != "" {
-		region := "africa-south1"
-		serviceName := os.Getenv("K_SERVICE")
-		return fmt.Sprintf("https://%s.%s.run.app", serviceName, region)
+		return "https://google-auth-service-656120491361.africa-south1.run.app/callback"
 	}
 
-	return "http://localhost:8080"
+	return "http://localhost:8080/callback"
 }
 
 func OAuthURL(state string) string {

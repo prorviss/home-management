@@ -13,7 +13,8 @@ locals {
       "roles/resourcemanager.projectIamAdmin",
       "roles/editor",
       "roles/storage.admin",
-      "roles/iam.workloadIdentityUser"
+      "roles/iam.workloadIdentityUser",
+      "roles/run.admin"
     ]
   }
 }
